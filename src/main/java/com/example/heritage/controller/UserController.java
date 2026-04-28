@@ -35,8 +35,8 @@ public class UserController {
 
         try {
 
-            if (u.getEmail() == null || u.getPassword() == null || u.getRole() == null) {
-                return ResponseEntity.badRequest().body("Email, password or role missing");
+            if (u.getEmail() == null || u.getPassword() == null) {
+                return ResponseEntity.badRequest().body("Email or password missing");
             }
 
             List<User> users = userRepo.findByEmail(u.getEmail());
@@ -45,24 +45,13 @@ public class UserController {
                 return ResponseEntity.status(404).body("User not found");
             }
 
-            User matchedUser = null;
+            User dbUser = users.get(0); // get user
 
-            for (User dbUser : users) {
-                if (dbUser.getRole().equalsIgnoreCase(u.getRole())) {
-                    matchedUser = dbUser;
-                    break;
-                }
-            }
-
-            if (matchedUser == null) {
-                return ResponseEntity.status(404).body("Role not found for this email");
-            }
-
-            if (!matchedUser.getPassword().equals(u.getPassword())) {
+            if (!dbUser.getPassword().equals(u.getPassword())) {
                 return ResponseEntity.status(401).body("Invalid password");
             }
 
-            return ResponseEntity.ok(matchedUser);
+            return ResponseEntity.ok(dbUser);
 
         } catch (Exception e) {
             e.printStackTrace();
