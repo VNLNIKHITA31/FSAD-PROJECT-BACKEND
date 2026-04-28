@@ -10,6 +10,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173")
+             .allowedOrigins("https://heritageconnectfrontend-production.up.railway.app")
+            
                 .allowedMethods("*")
                 .allowedHeaders("*");
     }
